@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>3D Model Viewer</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="https://threejs.org/build/three.js"></script>
+  <script src="https://threejs.org/examples/js/loaders/GLTFLoader.js"></script>
+  <script>
+    // Create the scene, camera, and renderer
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    var renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Load the GLTF model
+    var loader = new THREE.GLTFLoader();
+    loader.load('horse.gltf', function(gltf) {
+      scene.add(gltf.scene);
+    });
+
+    // Set the initial position of the camera
+    camera.position.z = 5;
+
+    // Function to rotate the model
+    function rotateModel() {
+      if (scene.children.length > 0) {
+        var model = scene.children[0];
+        model.rotation.y += 0.01;
+      }
+    }
+
+    // Render the scene
+    function render() {
+      requestAnimationFrame(render);
+      rotateModel();
+      renderer.render(scene, camera);
+    }
+
+    // Start rendering the scene
+    render();
+  </script>
+</body>
+</html>
